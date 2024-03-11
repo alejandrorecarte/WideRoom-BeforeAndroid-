@@ -16,9 +16,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.google.firebase</groupId>
-            <artifactId>firebase-admin</artifactId>
-            <version>9.2.0</version>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version> <!-- Esta es la versión más reciente al momento de escribir esto -->
         </dependency>
     </dependencies>
 </project>

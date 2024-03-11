@@ -198,8 +198,9 @@ public class HandlerHostServer extends Thread {
                     }
                 }
             }
-            if (message.split(" ")[3].equals("sent")) {
+            if (message.split(" ")[2].equals("sent")) {
                 try (ServerSocket imageSocketServer = new ServerSocket(Streams.importarImagePortReceiverServer())){;
+                    System.out.println(connectedIPs.toString());
                     Socket imageSocket = imageSocketServer.accept();
                     Thread handlerThread = new Thread(new ImageConnectionHandler(imageSocket, message.split(":")[0]));
                     handlerThread.start();
