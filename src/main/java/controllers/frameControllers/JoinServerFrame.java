@@ -42,6 +42,7 @@ public class JoinServerFrame {
         clientFrame.setContentPane(new JoinServerFrame(username, writer).mainPanel);
         clientFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         clientFrame.pack();
+        clientFrame.setIconImage(new ImageIcon("src/main/java/icons/LogoPlanoNoTitle.png").getImage());
         clientFrame.setBounds(mainFrame.getX() + MainFrame.WIDTH, mainFrame.getY() , WIDTH, HEIGHT);
     }
 

@@ -33,9 +33,18 @@ public class LogInFrame {
     private JLabel wideRoomLabel;
     private JButton noTienesUnaCuentaButton;
     private JButton noRecuerdasTuContraseñaButton;
+    private JLabel statusLabel;
 
     public static void startUI() {
         frame = new JFrame("WideRoom");
+        frame.setContentPane(new LogInFrame().mainPanel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setBounds(0,0, 400,400);
+        frame.setIconImage(new ImageIcon("src/main/java/icons/LogoPlanoNoTitle.png").getImage());
+        frame.setVisible(true);
+    }
+    public static void startUI(JFrame frame) {
         frame.setContentPane(new LogInFrame().mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -56,8 +65,7 @@ public class LogInFrame {
         noTienesUnaCuentaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                controllers.frameControllers.RegisterFrame.startUI();
-                frame.dispose();
+                controllers.frameControllers.RegisterFrame.startUI(frame);
             }
         });
 
@@ -76,7 +84,7 @@ public class LogInFrame {
                     String idToken  = jsonResponseObject.getString("idToken");
 
                     if(!checkIfAccountIsVerified(idToken)){
-                        JOptionPane.showMessageDialog(frame, "La cuenta no se ha verificado, comprueba tu email", "Error", JOptionPane.ERROR_MESSAGE);
+                        statusLabel.setText("La cuenta no se ha verificado, comprueba tu email.");
                     }else {
                         //Si no da error el inicio de sesión es correcto
                         User user = new User(emailField.getText(),Encoding.hashPassword(contraseñaField.getText()), getUsername(emailField.getText(), Encoding.hashPassword(contraseñaField.getText())));
@@ -86,7 +94,7 @@ public class LogInFrame {
 
                 }catch(Exception e){
                     e.printStackTrace();
-                    JOptionPane.showMessageDialog(frame, "Error al iniciar sesión.", "Error", JOptionPane.ERROR_MESSAGE);
+                    statusLabel.setText("Error al iniciar sesión, comprueba las credenciales.");
                 }
             }
         });

@@ -104,6 +104,17 @@
           <text value="¿No recuerdas tu contraseña?"/>
         </properties>
       </component>
+      <component id="dcb6f" class="javax.swing.JLabel" binding="statusLabel">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="3" left="10" bottom="10" right="3" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <font size="12"/>
+          <foreground color="-1"/>
+          <text value=""/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>

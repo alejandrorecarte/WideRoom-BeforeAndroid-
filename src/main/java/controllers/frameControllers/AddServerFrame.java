@@ -27,12 +27,13 @@ public class AddServerFrame {
     private JLabel serverNameLabel;
 
     public static void startUI() {
-        frame = new JFrame("Add Server");
+        frame = new JFrame("WideRoom");
         frame.setContentPane(new AddServerFrame().mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setBounds(MainFrame.mainFrame.getX(), MainFrame.mainFrame.getY(), 400, 300);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setIconImage(new ImageIcon("src/main/java/icons/LogoPlanoNoTitle.png").getImage());
         frame.setVisible(true);
     }
 

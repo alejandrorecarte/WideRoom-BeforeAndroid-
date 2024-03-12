@@ -30,6 +30,17 @@ public class SettingsFrame {
     public static final int WIDTH = 600;
     public static final int HEIGHT = 400;
 
+    public static void startUI() {
+        frame = new JFrame("WideRoom");
+        frame.setContentPane(new SettingsFrame().mainPanel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+        frame.setBounds(0,0, WIDTH, HEIGHT);
+        frame.setIconImage(new ImageIcon("src/main/java/icons/LogoPlanoNoTitle.png").getImage());
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    }
+
     public SettingsFrame() {
         try{
             filesDownloadsServerPathField.setText(Streams.importarFilesDownloadsServerPath());
@@ -76,15 +87,5 @@ public class SettingsFrame {
                 }
             }
         });
-    }
-
-    public static void startUI() {
-        frame = new JFrame("WideRoom Settings");
-        frame.setContentPane(new SettingsFrame().mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-        frame.setBounds(0,0, WIDTH, HEIGHT);
-        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 }

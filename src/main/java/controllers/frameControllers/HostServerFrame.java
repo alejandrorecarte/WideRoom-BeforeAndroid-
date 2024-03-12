@@ -22,7 +22,7 @@ import java.util.Set;
 import static controllers.frameControllers.MainFrame.mainFrame;
 
 public class HostServerFrame {
-    private static final int WIDTH = 600;
+    private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
     public static JFrame serverFrame;
     private JLabel wideRoomServerLabel;
@@ -38,6 +38,7 @@ public class HostServerFrame {
         serverFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         serverFrame.pack();
         serverFrame.setVisible(true);
+        serverFrame.setIconImage(new ImageIcon("src/main/java/icons/LogoPlanoNoTitle.png").getImage());
         serverFrame.setBounds(mainFrame.getX(), mainFrame.getY()+ MainFrame.HEIGHT, WIDTH, HEIGHT);
     }
 

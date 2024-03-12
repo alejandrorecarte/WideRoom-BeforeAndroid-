@@ -19,7 +19,6 @@ import java.net.URL;
 
 public class RegisterFrame {
     private static final String FIREBASE_API_KEY = "AIzaSyDW3T_5QVO6MWPVpINQda0sBEqWauMSVm8";
-    public static JFrame frame;
     private JPanel mainPanel;
     private JLabel wideRoomLabel;
     private JLabel emailLabel;
@@ -31,10 +30,10 @@ public class RegisterFrame {
     private JLabel repetirContraseñaLabel;
     private JTextField nombreDeUsuarioField;
     private JLabel nombreDeUsuarioLabel;
+    private JLabel statusLabel;
 
-    public static void startUI() {
-        frame = new JFrame("WideRoom");
-        frame.setContentPane(new RegisterFrame().mainPanel);
+    public static void startUI(JFrame frame) {
+        frame.setContentPane(new RegisterFrame(frame).mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setBounds(0,0,400,400);
@@ -42,7 +41,7 @@ public class RegisterFrame {
         frame.setVisible(true);
     }
 
-    public RegisterFrame() {
+    public RegisterFrame(JFrame frame) {
         Image image = new ImageIcon("src/main/java/icons/LogoBlanco.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH);
         wideRoomLabel.setIcon(new ImageIcon(image));
         repetirContraseñaField.addActionListener(new ActionListener() {
@@ -70,35 +69,30 @@ public class RegisterFrame {
                             String response = sendPostRequest(url, requestBody);
 
                             // Si el registro es exitoso, muestra un mensaje y procede
-                            JOptionPane.showMessageDialog(frame, "Usuario registrado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
                             JSONObject jsonResponseObject = new JSONObject(response);
-
                             String idToken = jsonResponseObject.getString("idToken");
-
                             sendEmailVerification(idToken);
-
                             exportUserData(emailField.getText(), nombreDeUsuarioField.getText(), Encoding.hashPassword(contraseñaField.getText()));
+                            controllers.frameControllers.LogInFrame.startUI(frame);
                         }else{
-                            JOptionPane.showMessageDialog(frame, "Usuario ya registrado.", "Error", JOptionPane.ERROR_MESSAGE);
+                            statusLabel.setText("Nombre de usuario ya registrado.");
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        JOptionPane.showMessageDialog(frame, "Error al registrar usuario.", "Error", JOptionPane.ERROR_MESSAGE);
+                        statusLabel.setText("Error al registrar al usuario.");
                     }
-                    controllers.frameControllers.LogInFrame.startUI();
-                    frame.dispose();
+
                 }else if(emailField.getText().contains(" ") && emailField.getText().split("").length >= 11){
-                    JOptionPane.showMessageDialog(frame, "El nombre de usuario que quieres registrar no cumple con las siguientes condiciones:\n" +
+                    statusLabel.setText("El nombre de usuario que quieres registrar no cumple con las siguientes condiciones:\n" +
                             "- No puede contener espacios.\n" +
-                            "- No puede tener más de 10 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+                            "- No puede tener más de 10 caracteres.");
                 } else if(!contraseñaField.getText().equals(repetirContraseñaField.getText())){
-                    JOptionPane.showMessageDialog(frame, "Las contraseñas no coinciden.", "Error", JOptionPane.ERROR_MESSAGE);
+                    statusLabel.setText("Los campos de contraseñas no coinciden.");
                 }else if(contraseñaField.getText().split("").length <= 5){
-                    JOptionPane.showMessageDialog(frame, "La contraseña debe tener al menos 6 dígitos.", "Error", JOptionPane.ERROR_MESSAGE);
+                    statusLabel.setText("La contraseña debe tener al menos 6 dígitos.");
                 }else if (nombreDeUsuarioField.getText().isEmpty() && emailField.getText().isEmpty()
                         && contraseñaField.getText().isEmpty() && repetirContraseñaField.getText().isEmpty()){
-                    JOptionPane.showMessageDialog(frame, "Los campos no deben estar vacíos.", "Error", JOptionPane.ERROR_MESSAGE);
+                    statusLabel.setText("Los campos no deben estar vacíos.");
                 }
             }
         });

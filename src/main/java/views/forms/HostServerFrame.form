@@ -35,6 +35,7 @@
             <properties>
               <background color="-11579569"/>
               <editable value="false"/>
+              <font size="16"/>
               <foreground color="-1"/>
             </properties>
           </component>
@@ -48,6 +49,7 @@
         <properties>
           <background color="-14211289"/>
           <focusPainted value="false"/>
+          <font size="16"/>
           <foreground color="-1"/>
           <text value="Stop"/>
         </properties>
