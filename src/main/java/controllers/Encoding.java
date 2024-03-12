@@ -57,29 +57,24 @@ public class Encoding {
         }
     }
 
-    public synchronized static String decrypt(String cipherText, String password) {
-        try {
-            // Generar una clave secreta basada en la contraseña usando PBKDF2
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            KeySpec spec = new PBEKeySpec(password.toCharArray(), "salt".getBytes(), 65536, 256);
-            SecretKey tmp = factory.generateSecret(spec);
-            SecretKey secretKey = new SecretKeySpec(tmp.getEncoded(), "AES");
+    public synchronized static String decrypt(String cipherText, String password) throws Exception{
+        // Generar una clave secreta basada en la contraseña usando PBKDF2
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), "salt".getBytes(), 65536, 256);
+        SecretKey tmp = factory.generateSecret(spec);
+        SecretKey secretKey = new SecretKeySpec(tmp.getEncoded(), "AES");
 
-            // Inicializar el cifrado para descifrar
-            Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        // Inicializar el cifrado para descifrar
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
 
-            // Decodificar la representación base64 del texto cifrado
-            byte[] cipherBytes = Base64.getDecoder().decode(cipherText);
+        // Decodificar la representación base64 del texto cifrado
+        byte[] cipherBytes = Base64.getDecoder().decode(cipherText);
 
-            // Descifrar los bytes
-            byte[] decryptedBytes = cipher.doFinal(cipherBytes);
+        // Descifrar los bytes
+        byte[] decryptedBytes = cipher.doFinal(cipherBytes);
 
-            // Convertir los bytes descifrados a una cadena
-            return new String(decryptedBytes);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        // Convertir los bytes descifrados a una cadena
+        return new String(decryptedBytes);
     }
 }

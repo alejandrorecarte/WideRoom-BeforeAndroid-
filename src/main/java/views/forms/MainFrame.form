@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="controllers.frameControllers.MainFrame">
   <grid id="27dc6" binding="mainPanel" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="20" y="20" width="796" height="574"/>
+      <xy x="20" y="20" width="1030" height="574"/>
     </constraints>
     <properties>
       <background color="-16777216"/>
@@ -12,7 +12,7 @@
       <grid id="acf3" binding="hostPanel" layout-manager="GridBagLayout">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="1.0" weighty="1.0"/>
+          <gridbag weightx="3.0" weighty="1.0"/>
         </constraints>
         <properties>
           <background color="-16777216"/>
@@ -23,44 +23,48 @@
           <component id="c4daa" class="javax.swing.JLabel" binding="hostPasswordLabel">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-              <gridbag top="3" left="10" bottom="3" right="3" weightx="1.0" weighty="1.0"/>
+              <gridbag top="3" left="10" bottom="3" right="3" weightx="1.0" weighty="0.0"/>
             </constraints>
             <properties>
+              <font size="16"/>
               <foreground color="-1"/>
-              <text value="Host password:"/>
+              <text value="Password:"/>
             </properties>
           </component>
           <component id="6deca" class="javax.swing.JButton" binding="createServerButton" default-binding="true">
             <constraints>
-              <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="3" left="10" bottom="10" right="10" weightx="1.0" weighty="5.0"/>
+              <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag top="3" left="10" bottom="10" right="10" weightx="3.0" weighty="5.0"/>
             </constraints>
             <properties>
               <background color="-14211289"/>
               <focusPainted value="false"/>
+              <font size="16"/>
               <foreground color="-1"/>
               <text value="Create Server"/>
             </properties>
           </component>
           <component id="d318b" class="javax.swing.JLabel" binding="hostAChatServerLabel">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
-              <gridbag top="10" left="10" bottom="3" right="10" weightx="1.0" weighty="1.0"/>
+              <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag top="10" left="10" bottom="3" right="10" weightx="3.0" weighty="0.0"/>
             </constraints>
             <properties>
+              <font size="16"/>
               <foreground color="-1"/>
               <text value="Host a chat server"/>
             </properties>
           </component>
           <component id="98467" class="javax.swing.JPasswordField" binding="hostPasswordField">
             <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+              <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
               </grid>
-              <gridbag top="3" left="3" bottom="3" right="10" weightx="5.0" weighty="1.0"/>
+              <gridbag top="3" left="3" bottom="3" right="10" weightx="2.0" weighty="0.0"/>
             </constraints>
             <properties>
               <background color="-11579569"/>
+              <font size="16"/>
               <foreground color="-1"/>
             </properties>
           </component>
@@ -69,7 +73,7 @@
       <grid id="ef066" binding="joinPanel" layout-manager="GridBagLayout">
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="1.0" weighty="1.0"/>
+          <gridbag weightx="3.0" weighty="1.0"/>
         </constraints>
         <properties>
           <background color="-16777216"/>
@@ -78,18 +82,19 @@
         <children>
           <component id="be123" class="javax.swing.JLabel" binding="joinAServerLabel">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
-              <gridbag top="10" left="10" bottom="3" right="10" weightx="1.0" weighty="1.0"/>
+              <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag top="10" left="10" bottom="3" right="10" weightx="3.0" weighty="0.0"/>
             </constraints>
             <properties>
+              <font size="16"/>
               <foreground color="-1"/>
               <text value="Join a server"/>
             </properties>
           </component>
           <scrollpane id="bb7d4" binding="serversScrollPane">
             <constraints>
-              <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-              <gridbag top="0" left="3" bottom="0" right="10" weightx="1.0" weighty="10.0"/>
+              <grid row="2" column="1" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag top="0" left="3" bottom="0" right="10" weightx="0.0" weighty="10.0"/>
             </constraints>
             <properties>
               <background color="-11579569"/>
@@ -100,93 +105,76 @@
                 <constraints/>
                 <properties>
                   <background color="-11579569"/>
+                  <font size="16"/>
                 </properties>
                 <border type="none"/>
                 <children/>
               </grid>
             </children>
           </scrollpane>
-          <component id="f0329" class="javax.swing.JButton" binding="addServerButton" default-binding="true">
-            <constraints>
-              <grid row="4" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="3" left="3" bottom="3" right="10" weightx="1.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <background color="-14211289"/>
-              <focusPainted value="false"/>
-              <foreground color="-1"/>
-              <text value="Add server"/>
-            </properties>
-          </component>
           <component id="2b911" class="javax.swing.JButton" binding="joinServerButton">
             <constraints>
-              <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="3" left="3" bottom="10" right="10" weightx="1.0" weighty="5.0"/>
+              <grid row="4" column="1" row-span="2" col-span="3" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag top="3" left="3" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
               <background color="-14211289"/>
               <enabled value="false"/>
               <focusPainted value="false"/>
+              <font size="16"/>
               <foreground color="-1"/>
               <text value="Join Server"/>
             </properties>
           </component>
-          <component id="659c" class="javax.swing.JButton" binding="removeServerButton" default-binding="true">
-            <constraints>
-              <grid row="6" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="3" left="3" bottom="3" right="10" weightx="1.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <background color="-14211289"/>
-              <enabled value="false"/>
-              <focusPainted value="false"/>
-              <foreground color="-1"/>
-              <text value="Remove Server"/>
-            </properties>
-          </component>
           <component id="39af6" class="javax.swing.JButton" binding="modifyServerButton" default-binding="true">
             <constraints>
-              <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="3" left="3" bottom="3" right="10" weightx="1.0" weighty="0.0"/>
+              <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag top="3" left="3" bottom="3" right="10" weightx="0.1" weighty="0.0"/>
             </constraints>
             <properties>
               <background color="-14211289"/>
               <enabled value="false"/>
               <focusPainted value="false"/>
+              <font size="16"/>
               <foreground color="-1"/>
-              <text value="Modify Server"/>
+              <text value=""/>
             </properties>
           </component>
-          <component id="b78f5" class="javax.swing.JTextField" binding="usernameField">
+          <component id="659c" class="javax.swing.JButton" binding="removeServerButton" default-binding="true">
             <constraints>
-              <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-              <gridbag top="3" left="3" bottom="3" right="10" weightx="5.0" weighty="0.0"/>
+              <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag top="3" left="3" bottom="3" right="10" weightx="0.1" weighty="0.0"/>
             </constraints>
             <properties>
-              <background color="-11579569"/>
+              <background color="-14211289"/>
+              <enabled value="false"/>
+              <focusPainted value="false"/>
+              <font size="16"/>
               <foreground color="-1"/>
+              <text value=""/>
             </properties>
           </component>
-          <component id="72baf" class="javax.swing.JLabel" binding="usernameLabel">
+          <component id="f0329" class="javax.swing.JButton" binding="addServerButton" default-binding="true">
             <constraints>
-              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-              <gridbag top="3" left="10" bottom="3" right="3" weightx="1.0" weighty="0.0"/>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag top="3" left="3" bottom="3" right="10" weightx="0.1" weighty="0.0"/>
             </constraints>
             <properties>
-              <alignmentX value="1.0"/>
+              <background color="-14211289"/>
+              <focusPainted value="false"/>
+              <font size="16"/>
               <foreground color="-1"/>
-              <text value="Username:"/>
+              <text value=""/>
             </properties>
           </component>
           <component id="2b3c0" class="javax.swing.JButton" binding="actualizarListaButton">
             <constraints>
-              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-              <gridbag top="3" left="3" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
+              <grid row="1" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag top="3" left="3" bottom="3" right="10" weightx="1.0" weighty="0.0"/>
             </constraints>
             <properties>
               <background color="-14211289"/>
+              <font size="16"/>
               <foreground color="-1"/>
               <label value="Actualizar lista"/>
               <text value="Actualizar lista"/>
@@ -197,22 +185,34 @@
       <component id="87269" class="javax.swing.JLabel" binding="wideRoomLabel">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-          <gridbag top="10" left="10" bottom="3" right="10" weightx="1.0" weighty="0.0"/>
+          <gridbag top="10" left="10" bottom="10" right="10" weightx="1.0" weighty="0.0"/>
         </constraints>
         <properties>
           <font size="16"/>
           <foreground color="-1"/>
-          <text value="WideRoom"/>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="774f6" class="javax.swing.JLabel" binding="usernameLabel">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="3" left="10" bottom="10" right="3" weightx="3.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <font size="16"/>
+          <foreground color="-1"/>
+          <text value=""/>
         </properties>
       </component>
       <component id="535bb" class="javax.swing.JButton" binding="settingsButton" default-binding="true">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag top="3" left="3" bottom="10" right="10" weightx="1.0" weighty="0.0"/>
+          <gridbag top="3" left="10" bottom="10" right="10" weightx="3.0" weighty="0.0"/>
         </constraints>
         <properties>
           <background color="-14211289"/>
           <focusPainted value="false"/>
+          <font size="16"/>
           <foreground color="-1"/>
           <text value="Settings"/>
         </properties>

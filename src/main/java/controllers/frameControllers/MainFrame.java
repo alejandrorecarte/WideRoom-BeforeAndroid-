@@ -4,6 +4,7 @@ import controllers.Misc;
 import controllers.Streams;
 import controllers.handlers.HandlerHostServer;
 import models.Servidor;
+import models.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,8 +22,8 @@ import static controllers.Encoding.*;
 
 public class MainFrame {
 
-    public static final int WIDTH = 600;
-    public static final int HEIGHT = 400;
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 800;
 
     public static JFrame mainFrame;
     private JPanel hostPanel;
@@ -44,8 +45,8 @@ public class MainFrame {
     private JButton removeServerButton;
     private JButton modifyServerButton;
     private JTextField usernameField;
-    private JLabel usernameLabel;
     private JButton actualizarListaButton;
+    private JLabel usernameLabel;
     public static LinkedList<String> serverMessages = new LinkedList<String>();
     public static LinkedList<String> clientMessages = new LinkedList<String>();
     private static final ArrayList<PrintWriter> writers = new ArrayList<>();
@@ -60,21 +61,32 @@ public class MainFrame {
     private ServerSocket serverSocket;
     public static ArrayList<Servidor> servidores;
     public static Servidor servidorEscogido;
+    public static User user;
 
-    public static void startUI() {
+    public static void startUI(User user) {
         mainFrame = new JFrame("WideRoom");
-        mainFrame.setContentPane(new MainFrame().mainPanel);
+        mainFrame.setContentPane(new MainFrame(user).mainPanel);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.pack();
         mainFrame.setVisible(true);
+        mainFrame.setIconImage(new ImageIcon("src/main/java/icons/LogoPlanoNoTitle.png").getImage());
         mainFrame.setBounds(0,0,WIDTH,HEIGHT);
     }
 
-    public MainFrame() {
-        try{
-            usernameField.setText(Streams.importarUsername());
-        }catch(Exception ex){
-        }
+    public MainFrame(User user) {
+        this.user = user;
+        usernameLabel.setText("Bienvenid@ " + user.getUsername());
+        Image icon = new ImageIcon("src/main/java/icons/LogoBlanco.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH);
+        wideRoomLabel.setIcon(new ImageIcon(icon));
+
+        Image addIcon = new ImageIcon("src/main/java/icons/AddIcon.png").getImage().getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        addServerButton.setIcon(new ImageIcon(addIcon));
+
+        Image modifyIcon = new ImageIcon("src/main/java/icons/ModifyIcon.png").getImage().getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        modifyServerButton.setIcon(new ImageIcon(modifyIcon));
+
+        Image removeIcon = new ImageIcon("src/main/java/icons/RemoveIcon.png").getImage().getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        removeServerButton.setIcon(new ImageIcon(removeIcon));
 
         try{
             servidores = Streams.importarServidores();
@@ -123,20 +135,19 @@ public class MainFrame {
         joinServerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!String.valueOf(usernameField.getText()).equals("") && servidorEscogido != null) {
-                    try {
-                        clientHashedPassword = servidorEscogido.getHashedPassword();
-                        clientSocket = new Socket(servidorEscogido.getIp(), servidorEscogido.getTextPort());
-                        clientReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                        clientWriter = new PrintWriter(clientSocket.getOutputStream(), true);
-                        consoleReader = new BufferedReader(new InputStreamReader(System.in));
-                        controllers.frameControllers.JoinServerFrame.startUI(usernameField.getText().replace(" ", ""), clientWriter);
-                        clientMessages = new LinkedList<String>();
-                        joinIP = servidorEscogido.getIp();
-                        joinServer();
-                    } catch (Exception ex){
-                        ex.printStackTrace();
-                    }
+
+                try {
+                    clientHashedPassword = servidorEscogido.getHashedPassword();
+                    clientSocket = new Socket(servidorEscogido.getIp(), servidorEscogido.getTextPort());
+                    clientReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                    clientWriter = new PrintWriter(clientSocket.getOutputStream(), true);
+                    consoleReader = new BufferedReader(new InputStreamReader(System.in));
+                    controllers.frameControllers.JoinServerFrame.startUI(user.getUsername(), clientWriter);
+                    clientMessages = new LinkedList<String>();
+                    joinIP = servidorEscogido.getIp();
+                    joinServer();
+                } catch (Exception ex){
+                    ex.printStackTrace();
                 }
             }
         });
@@ -200,7 +211,6 @@ public class MainFrame {
             public void windowClosing(WindowEvent e) {
                 super.windowClosed(e);
                 try {
-                    Streams.exportarUsername(usernameField.getText());
                     Misc.removeClientImages();
                     Misc.removeServerImages();
                 }catch(Exception ex){
@@ -220,6 +230,7 @@ public class MainFrame {
                 serversPanel.add(b);
                 b.setBackground(Color.decode("#272727"));
                 b.setForeground(Color.WHITE);
+                b.setFont(new Font("arial", Font.PLAIN, 16));
                 b.setFocusPainted(false);
                 b.setMaximumSize(new Dimension(Integer.MAX_VALUE, b.getPreferredSize().height));
 
@@ -277,7 +288,6 @@ public class MainFrame {
             protected Void doInBackground() throws Exception {
                 try {
                     clientMessages = new LinkedList<String>();
-                    String username = usernameField.getText();
                         Thread receiverThread = new Thread(() -> {
                             try {
                                 String serverMessage;
@@ -298,8 +308,8 @@ public class MainFrame {
                             if ("exit".equalsIgnoreCase(userInput)) {
                                 break;
                             }
-                            clientWriter.println("> " + username + ": " + userInput);
-                            clientMessages.add("> " + username + ": " + userInput);
+                            clientWriter.println("> " + user.getUsername() + ": " + userInput);
+                            clientMessages.add("> " + user.getUsername() + ": " + userInput);
                         }
                 } catch (IOException e) {
                     e.printStackTrace();

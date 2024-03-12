@@ -1,6 +1,7 @@
 package controllers.frameControllers;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -9,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import controllers.Encoding;
 import org.json.JSONObject;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -35,10 +38,13 @@ public class RegisterFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setBounds(0,0,400,400);
+        frame.setIconImage(new ImageIcon("src/main/java/icons/LogoPlanoNoTitle.png").getImage());
         frame.setVisible(true);
     }
 
     public RegisterFrame() {
+        Image image = new ImageIcon("src/main/java/icons/LogoBlanco.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH);
+        wideRoomLabel.setIcon(new ImageIcon(image));
         repetirContraseñaField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -49,9 +55,9 @@ public class RegisterFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(contraseñaField.getText().equals(repetirContraseñaField.getText()) && contraseñaField.getText().split("").length > 5
-                && emailField.getText().contains("@") && emailField.getText().contains(".")
-                && !nombreDeUsuarioField.getText().isEmpty() && !emailField.getText().isEmpty()
-                && !contraseñaField.getText().isEmpty() && !repetirContraseñaField.getText().isEmpty()) {
+                        && emailField.getText().contains("@") && emailField.getText().contains(".")
+                        && !nombreDeUsuarioField.getText().isEmpty() && !emailField.getText().isEmpty()
+                        && !contraseñaField.getText().isEmpty() && !repetirContraseñaField.getText().isEmpty()) {
                     try {
                         if(isUserRegistered(emailField.getText(), nombreDeUsuarioField.getText())) {
                             // Construir la URL para el registro de un nuevo usuario
@@ -72,7 +78,7 @@ public class RegisterFrame {
 
                             sendEmailVerification(idToken);
 
-                            exportUserData(emailField.getText(), nombreDeUsuarioField.getText(), idToken);
+                            exportUserData(emailField.getText(), nombreDeUsuarioField.getText(), Encoding.hashPassword(contraseñaField.getText()));
                         }else{
                             JOptionPane.showMessageDialog(frame, "Usuario ya registrado.", "Error", JOptionPane.ERROR_MESSAGE);
                         }
@@ -82,7 +88,11 @@ public class RegisterFrame {
                     }
                     controllers.frameControllers.LogInFrame.startUI();
                     frame.dispose();
-                }else if(!contraseñaField.getText().equals(repetirContraseñaField.getText())){
+                }else if(emailField.getText().contains(" ") && emailField.getText().split("").length >= 11){
+                    JOptionPane.showMessageDialog(frame, "El nombre de usuario que quieres registrar no cumple con las siguientes condiciones:\n" +
+                            "- No puede contener espacios.\n" +
+                            "- No puede tener más de 10 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else if(!contraseñaField.getText().equals(repetirContraseñaField.getText())){
                     JOptionPane.showMessageDialog(frame, "Las contraseñas no coinciden.", "Error", JOptionPane.ERROR_MESSAGE);
                 }else if(contraseñaField.getText().split("").length <= 5){
                     JOptionPane.showMessageDialog(frame, "La contraseña debe tener al menos 6 dígitos.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -128,12 +138,12 @@ public class RegisterFrame {
         String verificationResponse = sendPostRequest(verificationUrl, verificationRequestBody);
     }
 ;
-    private static void exportUserData(String email, String username, String idToken) throws Exception{
+    private static void exportUserData(String email, String username, String hashedPassword) throws Exception{
         // URL de la API REST de Cloud Firestore
         String firestoreUrl = "https://firestore.googleapis.com/v1/projects/wideroom-b6ed8/databases/(default)/documents/users";
 
         // Construir el JSON con los datos del usuario
-        String jsonData = "{\"fields\":{\"email\":{\"stringValue\":\"" + email + "\"},\"username\":{\"stringValue\":\"" + username + "\"}}}";
+        String jsonData = "{\"fields\":{\"email\":{\"stringValue\":\"" + Encoding.hashPassword(email) + "\"},\"username\":{\"stringValue\":\"" + username + "\"}}}";
 
         // Crear la conexión HTTP
         URL url = new URL(firestoreUrl);

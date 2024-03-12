@@ -72,24 +72,36 @@
       <component id="fb397" class="javax.swing.JLabel" binding="wideRoomLabel">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-          <gridbag top="10" left="10" bottom="3" right="10" weightx="1.0" weighty="0.0"/>
+          <gridbag top="10" left="10" bottom="10" right="10" weightx="1.0" weighty="0.0"/>
         </constraints>
         <properties>
           <font size="16"/>
           <foreground color="-1"/>
-          <text value="WideRoom"/>
+          <text value=""/>
         </properties>
       </component>
       <component id="496ba" class="javax.swing.JButton" binding="noTienesUnaCuentaButton" default-binding="true">
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
           <background color="-14211289"/>
-          <font size="16"/>
+          <font size="12"/>
           <foreground color="-1"/>
           <text value="¿No tienes una cuenta? Registrate aquí."/>
+        </properties>
+      </component>
+      <component id="2adee" class="javax.swing.JButton" binding="noRecuerdasTuContraseñaButton">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <background color="-14211289"/>
+          <font size="12"/>
+          <foreground color="-1"/>
+          <text value="¿No recuerdas tu contraseña?"/>
         </properties>
       </component>
     </children>
