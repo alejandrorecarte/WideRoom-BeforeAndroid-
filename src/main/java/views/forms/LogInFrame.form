@@ -11,7 +11,7 @@
     <children>
       <component id="b162a" class="javax.swing.JLabel" binding="emailLabel">
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="10" bottom="3" right="3" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -22,7 +22,7 @@
       </component>
       <component id="3ce51" class="javax.swing.JTextField" binding="emailField">
         <constraints>
-          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <gridbag top="3" left="3" bottom="3" right="10" weightx="5.0" weighty="0.0"/>
@@ -35,7 +35,7 @@
       </component>
       <component id="e8ac6" class="javax.swing.JLabel" binding="contraseñaLabel">
         <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="10" bottom="3" right="3" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -46,7 +46,7 @@
       </component>
       <component id="4963b" class="javax.swing.JPasswordField" binding="contraseñaField">
         <constraints>
-          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <gridbag top="3" left="3" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
@@ -59,11 +59,12 @@
       </component>
       <component id="c7e72" class="javax.swing.JButton" binding="iniciarSesiónButton">
         <constraints>
-          <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
+          <grid row="5" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
           <background color="-14211289"/>
+          <focusPainted value="false"/>
           <font size="16"/>
           <foreground color="-1"/>
           <text value="Iniciar sesión"/>
@@ -82,11 +83,12 @@
       </component>
       <component id="496ba" class="javax.swing.JButton" binding="noTienesUnaCuentaButton" default-binding="true">
         <constraints>
-          <grid row="5" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="7" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
           <background color="-14211289"/>
+          <focusPainted value="false"/>
           <font size="12"/>
           <foreground color="-1"/>
           <text value="¿No tienes una cuenta? Registrate aquí."/>
@@ -94,11 +96,12 @@
       </component>
       <component id="2adee" class="javax.swing.JButton" binding="noRecuerdasTuContraseñaButton">
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
           <background color="-14211289"/>
+          <focusPainted value="false"/>
           <font size="12"/>
           <foreground color="-1"/>
           <text value="¿No recuerdas tu contraseña?"/>
@@ -106,13 +109,35 @@
       </component>
       <component id="dcb6f" class="javax.swing.JLabel" binding="statusLabel">
         <constraints>
-          <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="8" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="10" bottom="10" right="3" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
           <font size="12"/>
           <foreground color="-1"/>
           <text value=""/>
+        </properties>
+      </component>
+      <component id="355b8" class="javax.swing.JCheckBox" binding="recordarEmailCheckBox" default-binding="true">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="3" left="10" bottom="3" right="10" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <background color="-16777216"/>
+          <foreground color="-1"/>
+          <text value="Recordar email"/>
+        </properties>
+      </component>
+      <component id="ed757" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <font size="16"/>
+          <foreground color="-1"/>
+          <text value="Iniciar sesión"/>
         </properties>
       </component>
     </children>

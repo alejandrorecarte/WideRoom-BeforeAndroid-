@@ -6,40 +6,23 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Streams {
-    public static void exportarServidores(ArrayList<Servidor> servidores) throws IOException {
-        FileOutputStream fileWriter = new FileOutputStream("src/main/java/resources/servidores");
+
+    public static void exportarEmail(String path) throws IOException {
+        FileOutputStream fileWriter = new FileOutputStream("src/main/java/resources/email");
         ObjectOutputStream objectWriter = new ObjectOutputStream(fileWriter);
-        objectWriter.writeObject(servidores);
+        objectWriter.writeObject(path);
         objectWriter.close();
         fileWriter.close();
     }
 
-    public static ArrayList<Servidor> importarServidores() throws IOException, ClassNotFoundException{
-        ArrayList<Servidor> servidores;
-        FileInputStream fileReader = new FileInputStream("src/main/java/resources/servidores");
+    public static String importarEmail() throws IOException, ClassNotFoundException{
+        String email = new String();
+        FileInputStream fileReader = new FileInputStream("src/main/java/resources/email");
         ObjectInputStream objectReader = new ObjectInputStream(fileReader);
-        servidores = (ArrayList<Servidor>) objectReader.readObject();
+        email = (String) objectReader.readObject();
         objectReader.close();
         fileReader.close();
-        return servidores;
-    }
-
-    public static void exportarUsername(String username) throws IOException {
-        FileOutputStream fileWriter = new FileOutputStream("src/main/java/resources/username");
-        ObjectOutputStream objectWriter = new ObjectOutputStream(fileWriter);
-        objectWriter.writeObject(username);
-        objectWriter.close();
-        fileWriter.close();
-    }
-
-    public static String importarUsername() throws IOException, ClassNotFoundException{
-        String username;
-        FileInputStream fileReader = new FileInputStream("src/main/java/resources/username");
-        ObjectInputStream objectReader = new ObjectInputStream(fileReader);
-        username = (String) objectReader.readObject();
-        objectReader.close();
-        fileReader.close();
-        return username;
+        return email;
     }
 
     public static void exportarFilesDownloadsServerPath(String path) throws IOException {

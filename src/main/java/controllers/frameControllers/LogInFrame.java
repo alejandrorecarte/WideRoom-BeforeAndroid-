@@ -1,16 +1,13 @@
 package controllers.frameControllers;
 
 import controllers.Encoding;
+import controllers.Streams;
+import models.Servidor;
 import models.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
 
 import javax.swing.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +15,7 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Base64;
+import java.util.ArrayList;
 
 public class LogInFrame {
 
@@ -34,27 +31,35 @@ public class LogInFrame {
     private JButton noTienesUnaCuentaButton;
     private JButton noRecuerdasTuContraseñaButton;
     private JLabel statusLabel;
+    private JCheckBox recordarEmailCheckBox;
 
     public static void startUI() {
         frame = new JFrame("WideRoom");
         frame.setContentPane(new LogInFrame().mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setBounds(0,0, 400,400);
+        frame.setBounds(0, 0, 500, 450);
         frame.setIconImage(new ImageIcon("src/main/java/icons/LogoPlanoNoTitle.png").getImage());
         frame.setVisible(true);
     }
+
     public static void startUI(JFrame frame) {
         frame.setContentPane(new LogInFrame().mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setBounds(0,0, 400,400);
+        frame.setBounds(0, 0, 500, 450);
         frame.setIconImage(new ImageIcon("src/main/java/icons/LogoPlanoNoTitle.png").getImage());
         frame.setVisible(true);
     }
 
     public LogInFrame() {
-        Image image = new ImageIcon("src/main/java/icons/LogoBlanco.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH);
+        try{
+            emailField.setText(Streams.importarEmail());
+            recordarEmailCheckBox.setSelected(true);
+        }catch (Exception e){
+        }
+
+        Image image = new ImageIcon("src/main/java/icons/LogoBlanco.png").getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         wideRoomLabel.setIcon(new ImageIcon(image));
         contraseñaField.addActionListener(new ActionListener() {
             @Override
@@ -81,18 +86,25 @@ public class LogInFrame {
 
                     JSONObject jsonResponseObject = new JSONObject(response);
 
-                    String idToken  = jsonResponseObject.getString("idToken");
+                    String idToken = jsonResponseObject.getString("idToken");
 
-                    if(!checkIfAccountIsVerified(idToken)){
+                    if (!checkIfAccountIsVerified(idToken)) {
                         statusLabel.setText("La cuenta no se ha verificado, comprueba tu email.");
-                    }else {
+                    } else {
                         //Si no da error el inicio de sesión es correcto
-                        User user = new User(emailField.getText(),Encoding.hashPassword(contraseñaField.getText()), getUsername(emailField.getText(), Encoding.hashPassword(contraseñaField.getText())));
-                        controllers.frameControllers.MainFrame.startUI(user);
+                        User user = new User(emailField.getText(), Encoding.hashPassword(contraseñaField.getText()), getUsername(emailField.getText()));
+
+                        if(recordarEmailCheckBox.isSelected()){
+                            Streams.exportarEmail(emailField.getText());
+                        }else{
+                            File email = new File("src/main/java/resources/email");
+                            email.delete();
+                        }
+                        controllers.frameControllers.MainFrame.startUI(user, getServidoresList(emailField.getText()));
                         frame.dispose();
                     }
 
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     statusLabel.setText("Error al iniciar sesión, comprueba las credenciales.");
                 }
@@ -130,7 +142,7 @@ public class LogInFrame {
         return response.toString();
     }
 
-    private boolean checkIfAccountIsVerified(String idToken){
+    private boolean checkIfAccountIsVerified(String idToken) {
         try {
             // Construir la URL para enviar la solicitud de verificación del correo electrónico
             String verificationUrl = "https://identitytoolkit.googleapis.com/v1/accounts:update?key=" + FIREBASE_API_KEY;
@@ -144,13 +156,13 @@ public class LogInFrame {
             JSONObject jsonResponseObject = new JSONObject(verificationResponse);
 
             return jsonResponseObject.getBoolean("emailVerified");
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    private static String getUsername(String email, String hashedPassword) throws Exception {
+    private static String getUsername(String email) throws Exception {
         // URL de la API REST de Cloud Firestore para obtener todos los documentos de la colección "users"
         String firestoreUrl = "https://firestore.googleapis.com/v1/projects/wideroom-b6ed8/databases/(default)/documents/users";
 
@@ -195,14 +207,15 @@ public class LogInFrame {
                 if ((Encoding.hashPassword(email).equals(userEmail))) {
                     return username;
                 }
-            }catch(Exception e){}
+            } catch (Exception e) {
+            }
         }
 
         // Si no se encontró el usuario
         return null;
     }
 
-    private void sendPasswordChange(String email){
+    private void sendPasswordChange(String email) {
         try {
             String verificationUrl = "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + FIREBASE_API_KEY;
 
@@ -211,8 +224,59 @@ public class LogInFrame {
 
             // Enviar la solicitud POST para enviar la solicitud de verificación del correo electrónico
             String verificationResponse = sendPostRequest(verificationUrl, verificationRequestBody);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static ArrayList<Servidor> getServidoresList(String email) throws Exception {
+        String hashedEmail = Encoding.hashPassword(email);
+        // URL de la API REST de Cloud Firestore para obtener todos los documentos
+        String getUrl = "https://firestore.googleapis.com/v1/projects/wideroom-b6ed8/databases/(default)/documents/serverslist";
+
+        // Realizar una solicitud GET para obtener todos los documentos
+        URL getEndpoint = new URL(getUrl);
+        HttpURLConnection getConnection = (HttpURLConnection) getEndpoint.openConnection();
+        getConnection.setRequestMethod("GET");
+
+        // Leer la respuesta
+        StringBuilder response = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getConnection.getInputStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+        }
+
+        // Parsear la respuesta para encontrar el documento que coincide con el correo electrónico
+        JSONObject jsonResponse = new JSONObject(response.toString());
+        JSONArray documents = jsonResponse.getJSONArray("documents");
+        for (int i = 0; i < documents.length(); i++) {
+            JSONObject document = documents.getJSONObject(i);
+            JSONObject fields = document.getJSONObject("fields");
+            if (fields.has("email")) {
+                String documentEmail = fields.getJSONObject("email").getString("stringValue");
+                if (documentEmail.equals(hashedEmail)) {
+                    // Encontramos el documento que coincide con el correo electrónico, extraer los servidores
+                    JSONArray serversArray = fields.getJSONObject("servers").getJSONObject("arrayValue").getJSONArray("values");
+                    ArrayList<Servidor> servidores = new ArrayList<>();
+                    for (int j = 0; j < serversArray.length(); j++) {
+                        JSONObject serverObject = serversArray.getJSONObject(j).getJSONObject("mapValue").getJSONObject("fields");
+                        String name = Encoding.decrypt(serverObject.getJSONObject("name").getString("stringValue"), hashedEmail);
+                        String ip = Encoding.decrypt(serverObject.getJSONObject("ip").getString("stringValue"), hashedEmail);
+                        int textPort = Integer.valueOf(Encoding.decrypt(serverObject.getJSONObject("textPort").getString("stringValue"), hashedEmail));
+                        int imagePortSender = Integer.valueOf(Encoding.decrypt(serverObject.getJSONObject("imagePortSender").getString("stringValue"), hashedEmail));
+                        int imagePortReceiver = Integer.valueOf(Encoding.decrypt(serverObject.getJSONObject("imagePortReceiver").getString("stringValue"), hashedEmail));
+                        String hashedPassword = Encoding.decrypt(serverObject.getJSONObject("hashedPassword").getString("stringValue"), hashedEmail);
+                        servidores.add(new Servidor(name, ip, textPort, imagePortSender, imagePortReceiver, hashedPassword));
+                    }
+                    return servidores;
+                }
+            }
+        }
+
+        // No se encontró un documento para el correo electrónico proporcionado
+        System.out.println("No se encontró un documento para el correo electrónico proporcionado.");
+        return null;
     }
 }

@@ -1,15 +1,16 @@
 package controllers.frameControllers;
 
 import controllers.Encoding;
-import controllers.Streams;
 import models.Servidor;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class AddServerFrame {
-    private static JFrame frame;
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 800;
     private JLabel IPLabel;
     private JLabel textPortLabel;
     private JLabel addANewServerLabel;
@@ -25,19 +26,28 @@ public class AddServerFrame {
     private JPanel mainPanel;
     private JTextField serverNameField;
     private JLabel serverNameLabel;
+    private JButton volverButton;
 
-    public static void startUI() {
-        frame = new JFrame("WideRoom");
+    public static void startUI(JFrame frame) {
         frame.setContentPane(new AddServerFrame().mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setBounds(MainFrame.mainFrame.getX(), MainFrame.mainFrame.getY(), 400, 300);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setIconImage(new ImageIcon("src/main/java/icons/LogoPlanoNoTitle.png").getImage());
+        frame.setBounds(frame.getX(), frame.getY(), WIDTH, HEIGHT);
         frame.setVisible(true);
     }
 
     public AddServerFrame() {
+        Image backIcon = new ImageIcon("src/main/java/icons/BackIcon.png").getImage().getScaledInstance(30,30, Image.SCALE_SMOOTH);
+        volverButton.setIcon(new ImageIcon(backIcon));
+
+        volverButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                MainFrame.startUI(MainFrame.user, MainFrame.servidores);
+            }
+        });
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -45,13 +55,8 @@ public class AddServerFrame {
                         Integer.valueOf(imagePortSenderField.getText()), Integer.valueOf(imagePortReceiverField.getText()),
                         Encoding.hashPassword(passwordField.getText()));
                 MainFrame.servidores.add(servidor);
-                try{
-                    Streams.exportarServidores(MainFrame.servidores);
-                }catch (Exception ex){
-                    ex.printStackTrace();
-                }
 
-                frame.dispose();
+                MainFrame.startUI(MainFrame.user, MainFrame.servidores);
             }
         });
     }

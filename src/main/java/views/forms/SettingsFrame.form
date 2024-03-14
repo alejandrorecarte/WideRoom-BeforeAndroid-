@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="controllers.frameControllers.SettingsFrame">
   <grid id="27dc6" binding="mainPanel" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="20" y="20" width="500" height="385"/>
+      <xy x="20" y="20" width="500" height="457"/>
     </constraints>
     <properties>
       <background color="-16777216"/>
@@ -11,7 +11,7 @@
     <children>
       <component id="e3171" class="javax.swing.JLabel" binding="wideRoomSettingsLabel">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="10" left="10" bottom="3" right="10" weightx="1.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -22,7 +22,7 @@
       </component>
       <component id="6cab2" class="javax.swing.JLabel" binding="filesDownloadsClientPathLabel">
         <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="10" bottom="3" right="3" weightx="1.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -33,7 +33,7 @@
       </component>
       <component id="ca24f" class="javax.swing.JTextField" binding="filesDownloadsClientPathField">
         <constraints>
-          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <gridbag top="3" left="3" bottom="3" right="10" weightx="5.0" weighty="0.0"/>
@@ -46,8 +46,8 @@
       </component>
       <component id="e22ec" class="javax.swing.JLabel" binding="clientSettingsLabel">
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <gridbag top="3" left="10" bottom="3" right="3" weightx="1.0" weighty="0.0"/>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="10" left="10" bottom="3" right="3" weightx="1.0" weighty="0.0"/>
         </constraints>
         <properties>
           <font size="16"/>
@@ -57,8 +57,8 @@
       </component>
       <component id="dd91f" class="javax.swing.JLabel" binding="serverSettingsLabel">
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <gridbag top="3" left="10" bottom="3" right="3" weightx="1.0" weighty="0.0"/>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="10" left="10" bottom="3" right="3" weightx="1.0" weighty="0.0"/>
         </constraints>
         <properties>
           <font size="16"/>
@@ -68,7 +68,7 @@
       </component>
       <component id="4338b" class="javax.swing.JLabel" binding="filesDownloadsServerPathLabel">
         <constraints>
-          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="10" bottom="3" right="3" weightx="1.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -78,30 +78,6 @@
         </properties>
       </component>
       <component id="dc3a4" class="javax.swing.JTextField" binding="filesDownloadsServerPathField">
-        <constraints>
-          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <gridbag top="3" left="3" bottom="3" right="10" weightx="5.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <background color="-11579569"/>
-          <font size="16"/>
-          <foreground color="-1"/>
-        </properties>
-      </component>
-      <component id="82f13" class="javax.swing.JLabel" binding="textPortServerLabel">
-        <constraints>
-          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <gridbag top="3" left="10" bottom="3" right="3" weightx="1.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <font size="16"/>
-          <foreground color="-1"/>
-          <text value="Text port:"/>
-        </properties>
-      </component>
-      <component id="6f82d" class="javax.swing.JTextField" binding="textPortServerField">
         <constraints>
           <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -114,7 +90,7 @@
           <foreground color="-1"/>
         </properties>
       </component>
-      <component id="d277" class="javax.swing.JLabel" binding="imagePortSenderServerLabel">
+      <component id="82f13" class="javax.swing.JLabel" binding="textPortServerLabel">
         <constraints>
           <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="10" bottom="3" right="3" weightx="1.0" weighty="0.0"/>
@@ -122,21 +98,10 @@
         <properties>
           <font size="16"/>
           <foreground color="-1"/>
-          <text value="Image port (sender):"/>
+          <text value="Text port:"/>
         </properties>
       </component>
-      <component id="5f66c" class="javax.swing.JLabel" binding="imagePortReceiverServerLabel">
-        <constraints>
-          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <gridbag top="3" left="10" bottom="3" right="3" weightx="1.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <font size="16"/>
-          <foreground color="-1"/>
-          <text value="Image port (receiver):"/>
-        </properties>
-      </component>
-      <component id="af34d" class="javax.swing.JTextField" binding="imagePortSenderServerField">
+      <component id="6f82d" class="javax.swing.JTextField" binding="textPortServerField">
         <constraints>
           <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -149,7 +114,29 @@
           <foreground color="-1"/>
         </properties>
       </component>
-      <component id="a3a62" class="javax.swing.JTextField" binding="imagePortReceiverServerField">
+      <component id="d277" class="javax.swing.JLabel" binding="imagePortSenderServerLabel">
+        <constraints>
+          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="3" left="10" bottom="3" right="3" weightx="1.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <font size="16"/>
+          <foreground color="-1"/>
+          <text value="Image port (sender):"/>
+        </properties>
+      </component>
+      <component id="5f66c" class="javax.swing.JLabel" binding="imagePortReceiverServerLabel">
+        <constraints>
+          <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="3" left="10" bottom="3" right="3" weightx="1.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <font size="16"/>
+          <foreground color="-1"/>
+          <text value="Image port (receiver):"/>
+        </properties>
+      </component>
+      <component id="af34d" class="javax.swing.JTextField" binding="imagePortSenderServerField">
         <constraints>
           <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -162,9 +149,22 @@
           <foreground color="-1"/>
         </properties>
       </component>
+      <component id="a3a62" class="javax.swing.JTextField" binding="imagePortReceiverServerField">
+        <constraints>
+          <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <gridbag top="3" left="3" bottom="3" right="10" weightx="5.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <background color="-11579569"/>
+          <font size="16"/>
+          <foreground color="-1"/>
+        </properties>
+      </component>
       <component id="2986" class="javax.swing.JCheckBox" binding="autodestroyImagesServerCheckBox">
         <constraints>
-          <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="3" bottom="10" right="10" weightx="5.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -176,7 +176,7 @@
       </component>
       <component id="97c02" class="javax.swing.JCheckBox" binding="autodestroyImagesClientCheckBox">
         <constraints>
-          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="3" bottom="10" right="3" weightx="5.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -184,6 +184,17 @@
           <font size="16"/>
           <foreground color="-1"/>
           <text value="Autodestroy images"/>
+        </properties>
+      </component>
+      <component id="6e991" class="javax.swing.JButton" binding="volverButton">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <background color="-11579569"/>
+          <focusPainted value="false"/>
+          <text value=""/>
         </properties>
       </component>
     </children>

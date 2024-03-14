@@ -3,10 +3,16 @@ package controllers.frameControllers;
 import controllers.Streams;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class SettingsFrame {
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 800;
+
     private static JFrame frame;
     private JPanel mainPanel;
     private JLabel filesDownloadsClientPathLabel;
@@ -27,21 +33,42 @@ public class SettingsFrame {
     private JTextField imagePortReceiverClientField;
     private JCheckBox autodestroyImagesServerCheckBox;
     private JCheckBox autodestroyImagesClientCheckBox;
-    public static final int WIDTH = 600;
-    public static final int HEIGHT = 400;
+    private JButton volverButton;
 
-    public static void startUI() {
-        frame = new JFrame("WideRoom");
+    public static void startUI(JFrame frame) {
         frame.setContentPane(new SettingsFrame().mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
         frame.setBounds(0,0, WIDTH, HEIGHT);
         frame.setIconImage(new ImageIcon("src/main/java/icons/LogoPlanoNoTitle.png").getImage());
-        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     public SettingsFrame() {
+        Image backIcon = new ImageIcon("src/main/java/icons/BackIcon.png").getImage().getScaledInstance(30,30, Image.SCALE_SMOOTH);
+        volverButton.setIcon(new ImageIcon(backIcon));
+
+        volverButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    Streams.exportarFilesDownloadsServerPath(filesDownloadsServerPathField.getText());
+                    Streams.exportarFilesDownloadsClientPath(filesDownloadsClientPathField.getText());
+                    Streams.exportarTextPortServer(Integer.parseInt(textPortServerField.getText()));
+                    Streams.exportarImagePortSenderServer(Integer.parseInt(imagePortSenderServerField.getText()));
+                    Streams.exportarImagePortReceiverServer(Integer.parseInt(imagePortReceiverServerField.getText()));
+                    Streams.exportarAutodestroyImagesClient(autodestroyImagesClientCheckBox.isSelected());
+                    Streams.exportarAutodestroyImagesServer(autodestroyImagesServerCheckBox.isSelected());
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "Error", "Error exporting settings infromation", JOptionPane.ERROR_MESSAGE);
+                    frame.dispose();
+                }
+                MainFrame.startUI(MainFrame.user, MainFrame.servidores);
+            }
+        });
+
         try{
             filesDownloadsServerPathField.setText(Streams.importarFilesDownloadsServerPath());
             filesDownloadsClientPathField.setText(Streams.importarFilesDownloadsClientPath());
@@ -63,29 +90,5 @@ public class SettingsFrame {
             autodestroyImagesClientCheckBox.setSelected(true);
             autodestroyImagesServerCheckBox.setSelected(true);
         }
-
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                int confirm = JOptionPane.showConfirmDialog(frame, "Do you want to exit this chat server?", "Exit confirmation", JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) {
-                    try {
-                        Streams.exportarFilesDownloadsServerPath(filesDownloadsServerPathField.getText());
-                        Streams.exportarFilesDownloadsClientPath(filesDownloadsClientPathField.getText());
-                        Streams.exportarTextPortServer(Integer.parseInt(textPortServerField.getText()));
-                        Streams.exportarImagePortSenderServer(Integer.parseInt(imagePortSenderServerField.getText()));
-                        Streams.exportarImagePortReceiverServer(Integer.parseInt(imagePortReceiverServerField.getText()));
-                        Streams.exportarAutodestroyImagesClient(autodestroyImagesClientCheckBox.isSelected());
-                        Streams.exportarAutodestroyImagesServer(autodestroyImagesServerCheckBox.isSelected());
-                    }catch(Exception ex){
-                        ex.printStackTrace();
-                        JOptionPane.showMessageDialog(frame, "Error", "Error exporting settings infromation", JOptionPane.ERROR_MESSAGE);
-                        frame.dispose();
-                    }
-                } else {
-                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                }
-            }
-        });
     }
 }

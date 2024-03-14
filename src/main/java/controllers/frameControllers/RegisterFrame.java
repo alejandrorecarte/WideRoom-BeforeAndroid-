@@ -14,8 +14,6 @@ import java.net.URL;
 import controllers.Encoding;
 import org.json.JSONObject;
 import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class RegisterFrame {
     private static final String FIREBASE_API_KEY = "AIzaSyDW3T_5QVO6MWPVpINQda0sBEqWauMSVm8";
@@ -31,17 +29,29 @@ public class RegisterFrame {
     private JTextField nombreDeUsuarioField;
     private JLabel nombreDeUsuarioLabel;
     private JLabel statusLabel;
+    private JButton volverButton;
 
     public static void startUI(JFrame frame) {
         frame.setContentPane(new RegisterFrame(frame).mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setBounds(0,0,400,400);
+        frame.setBounds(0,0,500,450);
         frame.setIconImage(new ImageIcon("src/main/java/icons/LogoPlanoNoTitle.png").getImage());
         frame.setVisible(true);
     }
 
     public RegisterFrame(JFrame frame) {
+        Image backIcon = new ImageIcon("src/main/java/icons/BackIcon.png").getImage().getScaledInstance(30,30, Image.SCALE_SMOOTH);
+        volverButton.setIcon(new ImageIcon(backIcon));
+
+        volverButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                LogInFrame.startUI(frame);
+            }
+        });
+
+        nombreDeUsuarioField.requestFocus();
         Image image = new ImageIcon("src/main/java/icons/LogoBlanco.png").getImage().getScaledInstance(100,100, Image.SCALE_SMOOTH);
         wideRoomLabel.setIcon(new ImageIcon(image));
         repetirContraseñaField.addActionListener(new ActionListener() {
@@ -72,7 +82,8 @@ public class RegisterFrame {
                             JSONObject jsonResponseObject = new JSONObject(response);
                             String idToken = jsonResponseObject.getString("idToken");
                             sendEmailVerification(idToken);
-                            exportUserData(emailField.getText(), nombreDeUsuarioField.getText(), Encoding.hashPassword(contraseñaField.getText()));
+                            exportUserData(emailField.getText(), nombreDeUsuarioField.getText());
+                            addServidoresList(emailField.getText());
                             controllers.frameControllers.LogInFrame.startUI(frame);
                         }else{
                             statusLabel.setText("Nombre de usuario ya registrado.");
@@ -132,7 +143,7 @@ public class RegisterFrame {
         String verificationResponse = sendPostRequest(verificationUrl, verificationRequestBody);
     }
 ;
-    private static void exportUserData(String email, String username, String hashedPassword) throws Exception{
+    private static void exportUserData(String email, String username) throws Exception{
         // URL de la API REST de Cloud Firestore
         String firestoreUrl = "https://firestore.googleapis.com/v1/projects/wideroom-b6ed8/databases/(default)/documents/users";
 
@@ -188,5 +199,48 @@ public class RegisterFrame {
             System.out.println("Error al recuperar los documentos. Código de respuesta: " + responseCode);
         }
         return true;
+    }
+
+    private static void addServidoresList(String email) throws Exception {
+        // Construir el JSON con los datos del usuario y la lista de servidores
+        String hashedEmail = Encoding.hashPassword(email);
+        StringBuilder jsonDataBuilder = new StringBuilder();
+        jsonDataBuilder.append("{\"fields\":{\"email\":{\"stringValue\":\"").append(hashedEmail).append("\"},\"servers\":{\"arrayValue\":{\"values\":[");
+
+        jsonDataBuilder.append("{\"mapValue\":{\"fields\":{");
+        jsonDataBuilder.append("\"name\":{\"stringValue\":\"").append(Encoding.encrypt("Localhost", hashedEmail)).append("\"},");
+        jsonDataBuilder.append("\"ip\":{\"stringValue\":\"").append(Encoding.encrypt("localhost", hashedEmail)).append("\"},");
+        jsonDataBuilder.append("\"textPort\":{\"stringValue\":\"").append(Encoding.encrypt("5555", hashedEmail)).append("\"},");
+        jsonDataBuilder.append("\"imagePortSender\":{\"stringValue\":\"").append(Encoding.encrypt("2020", hashedEmail)).append("\"},");
+        jsonDataBuilder.append("\"imagePortReceiver\":{\"stringValue\":\"").append(Encoding.encrypt("2021", hashedEmail)).append("\"},");
+        jsonDataBuilder.append("\"hashedPassword\":{\"stringValue\":\"").append(Encoding.encrypt("", hashedEmail)).append("\"}");
+        jsonDataBuilder.append("}}}");
+
+        jsonDataBuilder.append("]}}}}");
+
+        String jsonData = jsonDataBuilder.toString();
+
+        // URL de la API REST de Cloud Firestore para agregar un nuevo documento
+        String firestoreUrl = "https://firestore.googleapis.com/v1/projects/wideroom-b6ed8/databases/(default)/documents/serverslist";
+
+        // Crear la conexión HTTP
+        URL url = new URL(firestoreUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+
+        // Escribir los datos en la conexión
+        try (OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream())) {
+            writer.write(jsonData);
+        }
+
+        // Verificar la respuesta del servidor
+        int responseCode = conn.getResponseCode();
+        if (responseCode != HttpURLConnection.HTTP_OK && responseCode != HttpURLConnection.HTTP_CREATED) {
+            System.out.println("Error al agregar datos al documento en Cloud Firestore. Código de respuesta: " + responseCode);
+        } else {
+            System.out.println("Datos agregados correctamente a Cloud Firestore.");
+        }
     }
 }

@@ -220,7 +220,7 @@ public class JoinServerFrame {
                     MessagePanel messagePanel = new MessagePanel(username, message, date,Color.decode("#141414"), Color.WHITE);
                     messagePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
                     if (username.equals("Server")) {
-                        messagePanel.setColor(Color.ORANGE, Color.BLACK);
+                        messagePanel.setColor(Color.decode("#f14c8e"), Color.BLACK);
                     }
                     if (username.equals(this.username)) {
                         messagePanel.setColor(Color.decode("#000000"), Color.WHITE);

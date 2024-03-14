@@ -37,7 +37,7 @@ public class HandlerHostServer extends Thread {
             writer = new PrintWriter(socket.getOutputStream(), true);
             writers.add(writer);
 
-            while (true) {
+            while (!socket.isClosed()) {
                 String message = reader.readLine();
                 if (message == null) {
                     return;

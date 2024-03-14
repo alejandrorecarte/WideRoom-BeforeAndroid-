@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="controllers.frameControllers.RegisterFrame">
   <grid id="27dc6" binding="mainPanel" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
+      <xy x="20" y="20" width="515" height="400"/>
     </constraints>
     <properties>
       <background color="-16777216"/>
@@ -11,7 +11,7 @@
     <children>
       <component id="4cdb4" class="javax.swing.JLabel" binding="wideRoomLabel">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="10" left="10" bottom="10" right="10" weightx="1.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -23,7 +23,7 @@
       </component>
       <component id="6a000" class="javax.swing.JLabel" binding="emailLabel">
         <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="10" bottom="3" right="3" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -35,7 +35,7 @@
       </component>
       <component id="59804" class="javax.swing.JTextField" binding="emailField">
         <constraints>
-          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="4" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <gridbag top="3" left="3" bottom="3" right="10" weightx="5.0" weighty="0.0"/>
@@ -48,7 +48,7 @@
       </component>
       <component id="63e9e" class="javax.swing.JPasswordField" binding="contraseñaField">
         <constraints>
-          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <gridbag top="3" left="3" bottom="3" right="10" weightx="5.0" weighty="0.0"/>
@@ -61,7 +61,7 @@
       </component>
       <component id="3f10d" class="javax.swing.JLabel" binding="contraseñaLabel">
         <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="10" bottom="3" right="3" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -73,11 +73,12 @@
       </component>
       <component id="6f133" class="javax.swing.JButton" binding="registerButton" default-binding="true">
         <constraints>
-          <grid row="5" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag top="3" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
+          <grid row="7" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
           <background color="-14211289"/>
+          <focusPainted value="false"/>
           <font size="16"/>
           <foreground color="-1"/>
           <text value="Register"/>
@@ -85,7 +86,7 @@
       </component>
       <component id="6f029" class="javax.swing.JLabel" binding="repetirContraseñaLabel">
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="10" bottom="3" right="3" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -97,7 +98,7 @@
       </component>
       <component id="d7877" class="javax.swing.JPasswordField" binding="repetirContraseñaField">
         <constraints>
-          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="6" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <gridbag top="3" left="3" bottom="3" right="10" weightx="5.0" weighty="0.0"/>
@@ -110,7 +111,7 @@
       </component>
       <component id="882f4" class="javax.swing.JLabel" binding="nombreDeUsuarioLabel">
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="10" bottom="3" right="3" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -122,7 +123,7 @@
       </component>
       <component id="46aee" class="javax.swing.JTextField" binding="nombreDeUsuarioField">
         <constraints>
-          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <gridbag top="3" left="3" bottom="3" right="10" weightx="5.0" weighty="0.0"/>
@@ -135,7 +136,7 @@
       </component>
       <component id="feac" class="javax.swing.JLabel" binding="statusLabel">
         <constraints>
-          <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="8" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="3" left="10" bottom="3" right="3" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -143,6 +144,28 @@
           <font size="12"/>
           <foreground color="-1"/>
           <text value=""/>
+        </properties>
+      </component>
+      <component id="fafa" class="javax.swing.JButton" binding="volverButton">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <background color="-11579569"/>
+          <focusPainted value="false"/>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="62601" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <font size="16"/>
+          <foreground color="-1"/>
+          <text value="Register a new user"/>
         </properties>
       </component>
     </children>

@@ -82,7 +82,7 @@
         <children>
           <component id="be123" class="javax.swing.JLabel" binding="joinAServerLabel">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
               <gridbag top="10" left="10" bottom="3" right="10" weightx="3.0" weighty="0.0"/>
             </constraints>
             <properties>
@@ -178,8 +178,8 @@
               <background color="-14211289"/>
               <font size="16"/>
               <foreground color="-1"/>
-              <label value="Actualizar"/>
-              <text value="Actualizar"/>
+              <label value=""/>
+              <text value=""/>
             </properties>
           </component>
         </children>
