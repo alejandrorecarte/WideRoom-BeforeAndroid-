@@ -12,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import controllers.Encoding;
+import okhttp3.*;
 import org.json.JSONObject;
 import java.io.OutputStreamWriter;
 
@@ -68,27 +69,11 @@ public class RegisterFrame {
                         && !nombreDeUsuarioField.getText().isEmpty() && !emailField.getText().isEmpty()
                         && !contraseñaField.getText().isEmpty() && !repetirContraseñaField.getText().isEmpty()) {
                     try {
-                        if(isUserRegistered(emailField.getText(), nombreDeUsuarioField.getText())) {
-                            // Construir la URL para el registro de un nuevo usuario
-                            String url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + FIREBASE_API_KEY;
-
-                            // Crear el cuerpo de la solicitud JSON
-                            String requestBody = "{\"email\":\"" + emailField.getText() + "\",\"password\":\"" + contraseñaField.getText() + "\",\"returnSecureToken\":true}";
-
-                            // Enviar la solicitud POST para registrar un nuevo usuario
-                            String response = sendPostRequest(url, requestBody);
-
-                            // Si el registro es exitoso, muestra un mensaje y procede
-                            JSONObject jsonResponseObject = new JSONObject(response);
-                            String idToken = jsonResponseObject.getString("idToken");
-                            sendEmailVerification(idToken);
-                            exportUserData(emailField.getText(), nombreDeUsuarioField.getText());
-                            addServidoresList(emailField.getText());
-                            controllers.frameControllers.LogInFrame.startUI(frame);
-                        }else{
-                            statusLabel.setText("Nombre de usuario ya registrado.");
-                        }
-                    } catch (Exception e) {
+                        String[] ids = registerUser(emailField.getText(), contraseñaField.getText());
+                        sendEmailVerification(ids[0]);
+                        exportUserData(ids[0], ids[1], nombreDeUsuarioField.getText());
+                        controllers.frameControllers.LogInFrame.startUI(frame);
+                    } catch (IOException e) {
                         e.printStackTrace();
                         statusLabel.setText("Error al registrar al usuario.");
                     }
@@ -109,138 +94,85 @@ public class RegisterFrame {
         });
     }
 
-    private static String sendPostRequest(String url, String requestBody) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setDoOutput(true);
+    /**
+     * Registra un nuevo usuario en la base de datos.
+     * TODO: Comprobación de errores 40*
+     * @param email
+     * @param password
+     * @return {idToken, localId}
+     * @throws IOException
+     */
 
-        // Escribir el cuerpo de la solicitud en el flujo de salida
-        try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
-            outputStream.writeBytes(requestBody);
-            outputStream.flush();
-        }
+    private static String[] registerUser(String email, String password) throws IOException{
+        OkHttpClient client = new OkHttpClient();
 
-        // Leer la respuesta del servidor
-        StringBuilder response = new StringBuilder();
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-        }
-        return response.toString();
+        String url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key="+FIREBASE_API_KEY;
+
+        String jsonData = "{\"email\":\"" + email + "\",\"password\":\"" + password + "\",\"returnSecureToken\":true}";
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonData);
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        JSONObject jsonResponseObject = new JSONObject(response.body().string());
+        String[] ids = {jsonResponseObject.getString("idToken"), jsonResponseObject.getString("localId")};
+        return ids;
     }
 
-    private static void sendEmailVerification(String idtoken) throws IOException {
-        // Construir la URL para enviar la solicitud de verificación del correo electrónico
-        String verificationUrl = "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + FIREBASE_API_KEY;
+    /**
+     * Envía un correo de verificación al usuario.
+     * TODO: Comprobación de errores 40*
+     * @param idToken
+     * @throws IOException
+     */
+    private static void sendEmailVerification(String idToken) throws IOException {
+        OkHttpClient client = new OkHttpClient();
 
-        // Crear el cuerpo de la solicitud JSON para enviar la solicitud de verificación
-        String verificationRequestBody = "{\"requestType\":\"VERIFY_EMAIL\",\"idToken\":\"" + idtoken + "\"}";
+        String url = "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key="+FIREBASE_API_KEY;
 
-        // Enviar la solicitud POST para enviar la solicitud de verificación del correo electrónico
-        String verificationResponse = sendPostRequest(verificationUrl, verificationRequestBody);
-    }
-;
-    private static void exportUserData(String email, String username) throws Exception{
-        // URL de la API REST de Cloud Firestore
-        String firestoreUrl = "https://firestore.googleapis.com/v1/projects/wideroom-b6ed8/databases/(default)/documents/users";
+        String jsonData = "{\"requestType\":\"VERIFY_EMAIL\",\"idToken\":\""+idToken+"\"}";
 
-        // Construir el JSON con los datos del usuario
-        String jsonData = "{\"fields\":{\"email\":{\"stringValue\":\"" + Encoding.hashPassword(email) + "\"},\"username\":{\"stringValue\":\"" + username + "\"}}}";
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonData);
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build();
 
-        // Crear la conexión HTTP
-        URL url = new URL(firestoreUrl);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true);
-
-        // Escribir los datos en la conexión
-        OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-        writer.write(jsonData);
-        writer.flush();
-        writer.close();
-
-        // Verificar la respuesta del servidor
-        int responseCode = conn.getResponseCode();
-        if (responseCode != HttpURLConnection.HTTP_OK && responseCode != HttpURLConnection.HTTP_CREATED) {
-            System.out.println("Error al agregar datos al documento en Cloud Firestore. Código de respuesta: " + responseCode);
-        }
+        Response response = client.newCall(request).execute();
     }
 
-    private static boolean isUserRegistered(String username, String email) throws Exception {
-        // URL de la API REST de Cloud Firestore para obtener todos los documentos de la colección "users"
-        String firestoreUrl = "https://firestore.googleapis.com/v1/projects/wideroom-b6ed8/databases/(default)/documents/users";
+    /**
+     * Guarda el nombre de usuario en la BBDD.
+     * TODO: Comprobación de errores 40*
+     * @param idToken
+     * @param localId
+     * @param username
+     * @throws IOException
+     */
+    private static void exportUserData(String idToken, String localId,  String username) throws IOException{
+        OkHttpClient client = new OkHttpClient();
 
-        // Crear la conexión HTTP
-        URL url = new URL(firestoreUrl);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true);
+        // URL del endpoint para agregar datos a Firestore
+        String url = "https://firestore.googleapis.com/v1/projects/wideroom-b6ed8/databases/(default)/documents/users/"+localId+"/data/username";
 
-        // Leer la respuesta del servidor
-        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        StringBuilder response = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            if(line.contains(email) || line.contains(username)){
-                return false;
-            }
-        }
-        reader.close();
+        String jsonData = "{\"fields\":{\"data\":{\"mapValue\":{\"fields\":{\"username\":{\"stringValue\":\"" + username + "\"}}}}}}";
 
-        // Verificar la respuesta del servidor
-        int responseCode = conn.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-        } else {
-            System.out.println("Error al recuperar los documentos. Código de respuesta: " + responseCode);
-        }
-        return true;
-    }
+        // Crea la solicitud POST con la autenticación adecuada
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonData);
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + idToken)
+                .addHeader("Content-Type", "application/json")
+                .patch(body)
+                .build();
 
-    private static void addServidoresList(String email) throws Exception {
-        // Construir el JSON con los datos del usuario y la lista de servidores
-        String hashedEmail = Encoding.hashPassword(email);
-        StringBuilder jsonDataBuilder = new StringBuilder();
-        jsonDataBuilder.append("{\"fields\":{\"email\":{\"stringValue\":\"").append(hashedEmail).append("\"},\"servers\":{\"arrayValue\":{\"values\":[");
-
-        jsonDataBuilder.append("{\"mapValue\":{\"fields\":{");
-        jsonDataBuilder.append("\"name\":{\"stringValue\":\"").append(Encoding.encrypt("Localhost", hashedEmail)).append("\"},");
-        jsonDataBuilder.append("\"ip\":{\"stringValue\":\"").append(Encoding.encrypt("localhost", hashedEmail)).append("\"},");
-        jsonDataBuilder.append("\"textPort\":{\"stringValue\":\"").append(Encoding.encrypt("5555", hashedEmail)).append("\"},");
-        jsonDataBuilder.append("\"imagePortSender\":{\"stringValue\":\"").append(Encoding.encrypt("2020", hashedEmail)).append("\"},");
-        jsonDataBuilder.append("\"imagePortReceiver\":{\"stringValue\":\"").append(Encoding.encrypt("2021", hashedEmail)).append("\"},");
-        jsonDataBuilder.append("\"hashedPassword\":{\"stringValue\":\"").append(Encoding.encrypt("", hashedEmail)).append("\"}");
-        jsonDataBuilder.append("}}}");
-
-        jsonDataBuilder.append("]}}}}");
-
-        String jsonData = jsonDataBuilder.toString();
-
-        // URL de la API REST de Cloud Firestore para agregar un nuevo documento
-        String firestoreUrl = "https://firestore.googleapis.com/v1/projects/wideroom-b6ed8/databases/(default)/documents/serverslist";
-
-        // Crear la conexión HTTP
-        URL url = new URL(firestoreUrl);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true);
-
-        // Escribir los datos en la conexión
-        try (OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream())) {
-            writer.write(jsonData);
-        }
-
-        // Verificar la respuesta del servidor
-        int responseCode = conn.getResponseCode();
-        if (responseCode != HttpURLConnection.HTTP_OK && responseCode != HttpURLConnection.HTTP_CREATED) {
-            System.out.println("Error al agregar datos al documento en Cloud Firestore. Código de respuesta: " + responseCode);
-        } else {
-            System.out.println("Datos agregados correctamente a Cloud Firestore.");
-        }
+        // Ejecuta la solicitud y maneja la respuesta
+        Response response = client.newCall(request).execute();
     }
 }

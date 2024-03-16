@@ -2,9 +2,8 @@ package controllers.frameControllers;
 
 import controllers.Encoding;
 import controllers.Streams;
-import models.Servidor;
 import models.User;
-import org.json.JSONArray;
+import okhttp3.*;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -13,9 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 
 public class LogInFrame {
 
@@ -78,29 +74,18 @@ public class LogInFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    String url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + FIREBASE_API_KEY;
-
-                    String requestBody = "{\"email\":\"" + emailField.getText() + "\",\"password\":\"" + contraseñaField.getText() + "\",\"returnSecureToken\":true}";
-
-                    String response = sendPostRequest(url, requestBody);
-
-                    JSONObject jsonResponseObject = new JSONObject(response);
-
-                    String idToken = jsonResponseObject.getString("idToken");
-
-                    if (!checkIfAccountIsVerified(idToken)) {
+                    User user = logIn(emailField.getText(), contraseñaField.getText());
+                    if (!checkIfAccountIsVerified(user)) {
                         statusLabel.setText("La cuenta no se ha verificado, comprueba tu email.");
                     } else {
                         //Si no da error el inicio de sesión es correcto
-                        User user = new User(emailField.getText(), Encoding.hashPassword(contraseñaField.getText()), getUsername(emailField.getText()));
-
                         if(recordarEmailCheckBox.isSelected()){
                             Streams.exportarEmail(emailField.getText());
                         }else{
                             File email = new File("src/main/java/resources/email");
                             email.delete();
                         }
-                        controllers.frameControllers.MainFrame.startUI(user, getServidoresList(emailField.getText()));
+                        controllers.frameControllers.MainFrame.startUI(user);
                         frame.dispose();
                     }
 
@@ -114,169 +99,127 @@ public class LogInFrame {
         noRecuerdasTuContraseñaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                sendPasswordChange(emailField.getText());
+                try {
+                    sendPasswordChange(emailField.getText());
+                }catch(IOException e){
+                    e.printStackTrace();
+                }
             }
         });
     }
 
-    private static String sendPostRequest(String url, String requestBody) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setDoOutput(true);
-
-        // Escribe el cuerpo de la solicitud
-        try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
-            outputStream.writeBytes(requestBody);
-            outputStream.flush();
-        }
-
-        // Lee la respuesta
-        StringBuilder response = new StringBuilder();
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-        }
-        return response.toString();
-    }
-
-    private boolean checkIfAccountIsVerified(String idToken) {
-        try {
-            // Construir la URL para enviar la solicitud de verificación del correo electrónico
-            String verificationUrl = "https://identitytoolkit.googleapis.com/v1/accounts:update?key=" + FIREBASE_API_KEY;
-
-            // Crear el cuerpo de la solicitud JSON para enviar la solicitud de verificación
-            String verificationRequestBody = "{\"requestType\":\"VERIFY_EMAIL\",\"idToken\":\"" + idToken + "\"}";
-
-            // Enviar la solicitud POST para enviar la solicitud de verificación del correo electrónico
-            String verificationResponse = sendPostRequest(verificationUrl, verificationRequestBody);
-
-            JSONObject jsonResponseObject = new JSONObject(verificationResponse);
-
-            return jsonResponseObject.getBoolean("emailVerified");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    private static String getUsername(String email) throws Exception {
-        // URL de la API REST de Cloud Firestore para obtener todos los documentos de la colección "users"
-        String firestoreUrl = "https://firestore.googleapis.com/v1/projects/wideroom-b6ed8/databases/(default)/documents/users";
-
-        // Crear la conexión HTTP
-        URL url = new URL(firestoreUrl);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true);
-
-        // Leer la respuesta del servidor
-        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        StringBuilder response = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            response.append(line);
-        }
-        reader.close();
-
-        // Convertir la respuesta JSON en un objeto JSONObject
-        JSONObject jsonResponse = new JSONObject(response.toString());
-
-        // Obtener la lista de documentos de la respuesta JSON
-        JSONArray documents = jsonResponse.getJSONArray("documents");
-
-        // Iterar sobre cada documento
-        for (int i = 0; i < documents.length(); i++) {
-            // Obtener el contenido del documento actual
-            JSONObject document = documents.getJSONObject(i);
-
-            // Obtener el contenido del campo "fields" del documento
-            JSONObject fields = document.getJSONObject("fields");
-
-            // Obtener el valor del campo "email" del documento
-            String userEmail = fields.getJSONObject("email").getString("stringValue");
-
-            // Obtener el valor del campo "username" del documento
-            String username = fields.getJSONObject("username").getString("stringValue");
-
-            try {
-                // Verificar si el "email" coincide con el correo electrónico proporcionado
-                if ((Encoding.hashPassword(email).equals(userEmail))) {
-                    return username;
-                }
-            } catch (Exception e) {
-            }
-        }
-
-        // Si no se encontró el usuario
-        return null;
-    }
-
-    private void sendPasswordChange(String email) {
-        try {
-            String verificationUrl = "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + FIREBASE_API_KEY;
-
-            // Crear el cuerpo de la solicitud JSON para enviar la solicitud de verificación
-            String verificationRequestBody = "{\"requestType\":\"PASSWORD_RESET\",\"email\":\"" + email + "\"}";
-
-            // Enviar la solicitud POST para enviar la solicitud de verificación del correo electrónico
-            String verificationResponse = sendPostRequest(verificationUrl, verificationRequestBody);
-        } catch (Exception e) {
+    public static void main(String[] args) {
+        try{
+            User user = logIn("alex.rekart3@gmail.com", "123456");
+        }catch(Exception e){
             e.printStackTrace();
         }
     }
 
-    public static ArrayList<Servidor> getServidoresList(String email) throws Exception {
-        String hashedEmail = Encoding.hashPassword(email);
-        // URL de la API REST de Cloud Firestore para obtener todos los documentos
-        String getUrl = "https://firestore.googleapis.com/v1/projects/wideroom-b6ed8/databases/(default)/documents/serverslist";
+    /**
+     * Permite iniciar sesión
+     * @param email
+     * @param password
+     * @return User user
+     * @throws IOException
+     */
+    private static User logIn(String email, String password) throws IOException{
+        OkHttpClient client = new OkHttpClient();
 
-        // Realizar una solicitud GET para obtener todos los documentos
-        URL getEndpoint = new URL(getUrl);
-        HttpURLConnection getConnection = (HttpURLConnection) getEndpoint.openConnection();
-        getConnection.setRequestMethod("GET");
+        String url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="+FIREBASE_API_KEY;
 
-        // Leer la respuesta
-        StringBuilder response = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getConnection.getInputStream()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
-            }
-        }
+        String jsonData = "{\"email\":\"" + email + "\",\"password\":\"" + password + "\",\"returnSecureToken\":true}";
 
-        // Parsear la respuesta para encontrar el documento que coincide con el correo electrónico
-        JSONObject jsonResponse = new JSONObject(response.toString());
-        JSONArray documents = jsonResponse.getJSONArray("documents");
-        for (int i = 0; i < documents.length(); i++) {
-            JSONObject document = documents.getJSONObject(i);
-            JSONObject fields = document.getJSONObject("fields");
-            if (fields.has("email")) {
-                String documentEmail = fields.getJSONObject("email").getString("stringValue");
-                if (documentEmail.equals(hashedEmail)) {
-                    // Encontramos el documento que coincide con el correo electrónico, extraer los servidores
-                    JSONArray serversArray = fields.getJSONObject("servers").getJSONObject("arrayValue").getJSONArray("values");
-                    ArrayList<Servidor> servidores = new ArrayList<>();
-                    for (int j = 0; j < serversArray.length(); j++) {
-                        JSONObject serverObject = serversArray.getJSONObject(j).getJSONObject("mapValue").getJSONObject("fields");
-                        String name = Encoding.decrypt(serverObject.getJSONObject("name").getString("stringValue"), hashedEmail);
-                        String ip = Encoding.decrypt(serverObject.getJSONObject("ip").getString("stringValue"), hashedEmail);
-                        int textPort = Integer.valueOf(Encoding.decrypt(serverObject.getJSONObject("textPort").getString("stringValue"), hashedEmail));
-                        int imagePortSender = Integer.valueOf(Encoding.decrypt(serverObject.getJSONObject("imagePortSender").getString("stringValue"), hashedEmail));
-                        int imagePortReceiver = Integer.valueOf(Encoding.decrypt(serverObject.getJSONObject("imagePortReceiver").getString("stringValue"), hashedEmail));
-                        String hashedPassword = Encoding.decrypt(serverObject.getJSONObject("hashedPassword").getString("stringValue"), hashedEmail);
-                        servidores.add(new Servidor(name, ip, textPort, imagePortSender, imagePortReceiver, hashedPassword));
-                    }
-                    return servidores;
-                }
-            }
-        }
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonData);
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build();
 
-        // No se encontró un documento para el correo electrónico proporcionado
-        System.out.println("No se encontró un documento para el correo electrónico proporcionado.");
-        return null;
+        Response response = client.newCall(request).execute();
+
+        JSONObject jsonResponseObject = new JSONObject(response.body().string());
+
+        String username = getUsername(jsonResponseObject.getString("idToken"),jsonResponseObject.getString("localId"));
+        return new User(jsonResponseObject.getString("idToken"), jsonResponseObject.getString("localId"), jsonResponseObject.getString("email"), username);
+    }
+
+    /**
+     * Devuelve el nombre del usuario
+     * @param idToken
+     * @param localId
+     * @return String username
+     * @throws IOException
+     */
+    private static String getUsername(String idToken, String localId) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+
+        String url = "https://firestore.googleapis.com/v1/projects/wideroom-b6ed8/databases/(default)/documents/users/"+localId+"/data/username";
+
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + idToken)
+                .addHeader("Content-Type", "application/json")
+                .get()
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        JSONObject jsonResponseObject = new JSONObject(response.body().string());
+        JSONObject fieldsObject = jsonResponseObject.getJSONObject("fields");
+        JSONObject dataObject = fieldsObject.getJSONObject("data");
+        JSONObject usernameObject = dataObject.getJSONObject("mapValue").getJSONObject("fields").getJSONObject("username");
+        return usernameObject.getString("stringValue");
+    }
+
+    /**
+     * Comprueba si la cuenta ha sido verificada
+     * @param user
+     * @return boolean isVerified
+     * @throws IOException
+     */
+    private static boolean checkIfAccountIsVerified(User user) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+
+        String url = "https://identitytoolkit.googleapis.com/v1/accounts:update?key="+FIREBASE_API_KEY;
+
+        String jsonData = "{\"requestType\":\"VERIFY_EMAIL\",\"idToken\":\"" + user.getIdToken() + "\"}";
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonData);
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        JSONObject jsonResponseObject = new JSONObject(response.body().string());
+
+        return jsonResponseObject.getBoolean("emailVerified");
+    }
+
+    /**
+     * Envía un correo para cambiar la contraseña del usuario
+     * @param email
+     * @throws IOException
+     */
+    private void sendPasswordChange(String email) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+
+        String url = "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key="+FIREBASE_API_KEY;
+
+        String jsonData = "{\"requestType\":\"PASSWORD_RESET\",\"email\":\"" + email + "\"}";
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonData);
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build();
+
+        Response response = client.newCall(request).execute();
     }
 }

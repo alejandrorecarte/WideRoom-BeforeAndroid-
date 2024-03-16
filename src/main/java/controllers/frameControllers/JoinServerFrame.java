@@ -46,8 +46,12 @@ public class JoinServerFrame {
         clientFrame.setBounds(mainFrame.getX() + MainFrame.WIDTH, mainFrame.getY() , WIDTH, HEIGHT);
     }
 
+    private void createUIComponents() {
+        this.imageChooserComponent = new ImageChooserComponent();
+    }
+
     public JoinServerFrame(String username, PrintWriter writer) {
-        messages = new LinkedList<String>();
+        /*messages = new LinkedList<String>();
         this.username = username;
         this.writer = writer;
         messagesPanel.setLayout(new GridBagLayout());
@@ -143,21 +147,16 @@ public class JoinServerFrame {
                 }
             }
         });
+
+         */
     }
 
     private void sendMessage(PrintWriter writer){
-        if(!chatInputField.getText().equals("")) {
-            writer.println(encrypt(username + ":" + Misc.getDate() +":" + chatInputField.getText(), MainFrame.clientHashedPassword));
-            MainFrame.clientMessages.add(encrypt(username + ":" + Misc.getDate() +":" +  chatInputField.getText(), MainFrame.clientHashedPassword));
-            chatInputField.setText("");
-        }
-    }
 
-    public void sendMessage(String message, PrintWriter writer){
-        writer.println(message);
     }
 
     public synchronized void actualizarChat(){
+        /*
         if (JoinServerFrame.messages.size() < (MainFrame.clientMessages.size())) {
             try {
 
@@ -263,116 +262,7 @@ public class JoinServerFrame {
                 e.printStackTrace();
             }
         }
-    }
 
-
-
-    private boolean checkPassword() {
-        if (!access) {
-            try {
-                Thread.sleep(100);
-                if (!MainFrame.clientMessages.getLast().split(" ")[1].equals(MainFrame.clientHashedPassword)) {
-                    JOptionPane.showMessageDialog(clientFrame, "The password is incorrect", "Error", JOptionPane.ERROR_MESSAGE);
-                    clientFrame.dispose();
-                    return false;
-                } else {
-                    access = true;
-                    messagesPanel.removeAll();
-                    messages = new LinkedList<String>();
-                    MainFrame.clientMessages = new LinkedList<String>();
-                    MainFrame.clientMessages.add(encrypt("Server:" + Misc.getDate() +":" + "Welcome " + username + " to the server!", MainFrame.clientHashedPassword));
-                    sendMessage(encrypt("Server:"+ Misc.getDate() +":" + username + " joined the server.", MainFrame.clientHashedPassword), writer);
-                    clientFrame.setVisible(true);
-                }
-            } catch (NoSuchElementException e) {
-                System.out.println("Esperando al servidor...");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return true; // Devuelve true si la contraseña es correcta
-    }
-
-    private void createUIComponents() {
-        this.imageChooserComponent = new ImageChooserComponent();
-    }
-
-    private class Handler extends Thread {
-        public Handler() {
-        }
-
-        @Override
-        public void run() {
-            actualizarChat();
-        }
-    }
-
-    static class ImageConnectionHandler implements Runnable {
-        private Socket socket;
-        private String sender;
-
-        public ImageConnectionHandler(Socket socket, String sender) {
-            this.socket = socket;
-            this.sender = sender;
-        }
-
-        @Override
-        public void run() {
-            try {
-                InputStream inputStream = socket.getInputStream();
-                Calendar calendar = Calendar.getInstance();
-                String fileName = Streams.importarFilesDownloadsClientPath() + "/image" + sender + calendar.get(Calendar.DAY_OF_MONTH) + calendar.get(Calendar.MONTH)
-                        + calendar.get(Calendar.YEAR) + "_" + calendar.get(Calendar.HOUR_OF_DAY) + calendar.get(Calendar.MINUTE) + calendar.get(Calendar.SECOND) + ".jpg";
-                FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-                byte[] receiveBuffer = new byte[1024];
-                int receiveBytesRead;
-
-                while ((receiveBytesRead = inputStream.read(receiveBuffer)) != -1) {
-                    fileOutputStream.write(receiveBuffer, 0, receiveBytesRead);
-                }
-                MainFrame.clientMessages.add(encrypt( "Local:" + Misc.getDate() +":File saved into " + fileName, MainFrame.clientHashedPassword));
-                socket.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    static class CustomScrollBarUI extends BasicScrollBarUI {
-        @Override
-        protected void configureScrollBarColors() {
-            this.thumbColor = Color.decode("#000000");
-        }
-
-        @Override
-        protected JButton createDecreaseButton(int orientation) {
-            return createZeroButton();
-        }
-
-        @Override
-        protected JButton createIncreaseButton(int orientation) {
-            return createZeroButton();
-        }
-
-        private JButton createZeroButton() {
-            JButton button = new JButton();
-            Dimension zeroDim = new Dimension(0, 0);
-            button.setPreferredSize(zeroDim);
-            button.setMinimumSize(zeroDim);
-            button.setMaximumSize(zeroDim);
-            return button;
-        }
-
-        @Override
-        protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            // Rellenar un rectángulo redondeado con el color del thumb
-            g2.setColor(thumbColor);
-            g2.fillRoundRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height, 20, 20);
-
-            g2.dispose();
-        }
+         */
     }
 }
